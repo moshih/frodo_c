@@ -133,11 +133,11 @@ void lwe_sample_n_inverse_12_64(uint16_t s[8][8],uint16_t rnd[98]) {
 }
 
 uint16_t rounding (uint16_t input){
-	return input>>b_bar;
+	return ((input+1024)%32768)>>b_bar;
 }
 
 uint16_t cross (uint16_t input){
-	return input>>(b_bar+1);
+	return ((input%32768)>>(b_bar+1))%2;
 }
 
 //outputs 1 if a>b, 0 else
@@ -339,6 +339,10 @@ void main(){
 			c[i][j]=cross(v[i][j]);
 		}
 	}
+
+
+
+
 	uint16_t k_bob[8][8];
 	for ( i = 0; i < 8; i++ ){
 		for ( j = 0; j < 8; j++ ){
@@ -368,6 +372,9 @@ void main(){
 		}
 
 	}
+
+
+	
 
 	uint16_t k_alice[8][8];
 	for ( i = 0; i < 8; i++ ){
