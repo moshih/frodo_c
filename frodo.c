@@ -161,21 +161,25 @@ uint16_t greater_than(uint16_t a, uint16_t b){
 }
 
 uint16_t rec(uint16_t w, uint16_t b){
+	/*
 	if (cross(w)==b) return rounding(w);
 	if (w%4096 <2048){
 		return rounding(  ((w-w%4096)-1)%32768 );
 	}
 	return rounding(  ((w-w%4096+4096))%32768 );
-/*
+	*/
+
 	uint16_t equal = (cross(w) & b) + ((1^cross(w)) & (b^1));
 	uint16_t output = equal*w;
 
-	uint16_t want_zero=greater_than(cross(w),b);
-	uint16_t output1=(want_zero ^ 1) * (greater_than(w,2047)*4096 +(greater_than(w,2047) ^1)*32767 );
-	output1+=(want_zero ) * (greater_than(w,18433)*0 +(greater_than(w,18433) ^1)*4095 );
-	output=(equal ^1)*output1;
+	uint16_t want_high=greater_than(w%4096,2047);
+	uint16_t output1=(want_high ^ 1)*(  ((w-w%4096)-1)%32768 )+(want_high ^ 0)*(  ((w-w%4096+4096))%32768 );
+	output=output+(equal ^1)*output1;
+	//uint16_t output1=(want_zero ^ 1) * (greater_than(w,2047)*4096 +(greater_than(w,2047) ^1)*32767 );
+	//output1+=(want_zero ) * (greater_than(w,18433)*0 +(greater_than(w,18433) ^1)*4095 );
+	//output=(equal ^1)*output1;
 	return rounding(output);
-*/
+
 
 }
 
@@ -589,6 +593,7 @@ void main(){
 		
 	}
 	printf("\n");
+
 
 	printf("Done...................\n");
 
