@@ -1,5 +1,4 @@
-//#include <stdio.h>
-//#include <stdio.h>
+#include <stdio.h>
 #include <stdint.h>
 typedef struct {
 	uint16_t rnd1 : 11;
@@ -183,7 +182,89 @@ uint16_t rec(uint16_t w, uint16_t b){
 
 
 }
-/*
+
+//#include <math.h>
+void main3(){
+	int i,j;
+	int counter =0;
+	/*
+	for (i=0; i<32768; i++){
+		for (j=0; j<32768; j++){
+			uint16_t result=0;
+			if (i>j) result=1;
+			if (greater_than(i,j) != result) {
+				counter ++;
+				break;
+			}
+		}
+		//if (rounding(i) != ((int)(floor(i/2048+0.5)))) counter ++;
+	}
+	*/
+	//printf ("we have that %i\n",counter);
+	//printf ("we have that for greater %u \n",greater_than(1,5));
+	//printf ("we have that %u %u %u %u %u %u \n",cross(2047),cross(2048),cross(2049), cross(4095), cross(4096), cross(4097));
+
+}
+void main2(){
+	int i;
+	int counter =0;
+	for (i=0; i<32768; i++){
+		//if (rounding(i) != ((int)(floor(i/2048+0.5)))) counter ++;
+		//if (cross(i) != ((int)(floor(i/4096)))) counter ++;
+	}
+	printf ("we have that %i\n",counter);
+
+	printf ("we have that %u %u %u %u %u %u \n",cross(2047),cross(2048),cross(2049), cross(4095), cross(4096), cross(4097));
+
+}
+
+void main4(){
+	uint16_t A[2][2];
+	A[0][0]=5;
+	A[0][1]=1;
+	A[1][0]=3;
+	A[1][1]=7;
+
+	uint16_t x[2][1];
+	x[0][0]=10;
+	x[0][1]=100;
+
+	uint16_t b[2][1];
+	b[0][0]=0;
+	b[0][1]=0;
+
+	int i,j,i1,j1;
+	for ( i = 0; i < 2; i++ ){
+		for ( j = 0; j < 1; j++ ){
+
+
+			for ( i1 = 0; i1 < 2; i1++ ){
+				//for ( j1 = 0; j1 < 2; j1++ ){
+					b[i][j]=b[i][j]+A[i][i1]*x[i1][j];
+				//}
+			}
+
+
+		}
+
+	}
+	printf("we have %u %u \n",b[0][0],b[0][1]);
+
+}
+
+void main5(){
+	unsigned short i;
+	printf("We have %u %u %u %u %u\n",cross(32766),cross(32767),cross(32768), cross(0), cross(1));
+	unsigned short last=0;
+	for (i=0; i<32768; i++){
+		if (cross(i)!=last){
+			printf("%u %u \n",last, i);
+			last=cross(i);
+		}
+
+	}
+
+}
 void print_mat(uint16_t mat[][8]){
 	int i,j;
 	printf("\n MATRIX\n");
@@ -209,7 +290,6 @@ void print_matb(uint16_t mat[][752]){
 	}
 	printf("\n \n");
 }
-*/
 void main(){
 	uint16_t A[752][752];
 	uint16_t q=32768;
@@ -239,21 +319,7 @@ void main(){
 	lwe_sample_n_inverse_12_alice(s,rnd1);
 	lwe_sample_n_inverse_12_alice(e,rnd2);
 
-	for ( i = 0; i < 752; i++ ){
-		for ( j = 0; j < 8; j++ ){
-			s[i][j]=0;
-			if (i <8) s[i][j]=1;
 
-		}
-
-	}
-	for ( i = 0; i < 752; i++ ){
-		for ( j = 0; j < 8; j++ ){
-			e[i][j]=0;
-
-		}
-
-	}
 
 
 
@@ -308,27 +374,7 @@ void main(){
 	
 	lwe_sample_n_inverse_12_bob(sp,rnd3);
 	lwe_sample_n_inverse_12_bob(ep,rnd4);
-	for ( i = 0; i < 8; i++ ){
-		for ( j = 0; j < 752; j++ ){
-			sp[i][j]=0;
 
-		}
-
-	}
-	for ( i = 0; i < 8; i++ ){
-		for ( j = 0; j < 8; j++ ){
-			sp[i][j]=1;
-
-		}
-
-	}
-	for ( i = 0; i < 752; i++ ){
-		for ( j = 0; j < 8; j++ ){
-			ep[j][i]=0;
-
-		}
-
-	}
 
 	
 	uint16_t bp[8][752];
@@ -363,14 +409,6 @@ void main(){
 		rnd5[i]=(i*i*i*i*8587- i*i*i*505+ i*5503)%32768;
 	}
 	lwe_sample_n_inverse_12_64(epp,rnd5);
-	for ( i = 0; i < 8; i++ ){
-		for ( j = 0; j < 8; j++ ){
-			epp[i][j]=0;
-
-		}
-
-	}
-
 
 	uint16_t v[8][8];
 	for ( i = 0; i < 8; i++ ){
@@ -400,7 +438,7 @@ void main(){
 			c[i][j]=cross((v[i][j]%q));
 		}
 	}
-
+	printf("we have %u %u %u %u \n",v[0][0],v[0][1],c[0][0],c[0][1] );
 
 
 /*
@@ -443,7 +481,10 @@ void main(){
 		}
 
 	}
-
+	print_matb(bp);
+	printf("s..............\n");
+	print_mat(s);
+	print_mat(bp_s);
 
 	
  
@@ -454,5 +495,107 @@ void main(){
 			k_alice[i][j]=rec(bp_s[i][j],c[i][j]);
 		}
 	}
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+	printf("\n v MATRIX\n");
+	for ( i = 0; i < 8; i++ ){
+		for ( j = 0; j < 8; j++ ){
+			
+			printf("%u, ",v[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n \n");
+
+
+	printf("\nbp_s MATRIX\n");
+	for ( i = 0; i < 8; i++ ){
+		for ( j = 0; j < 8; j++ ){
+			
+			printf("%u, ",bp_s[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n c MATRIX\n");		
+
+/*
+
+	printf("\n");
+	for ( i = 0; i < 8; i++ ){
+		for ( j = 0; j < 8; j++ ){
+			
+			printf("[%u, %u], ",bp_s[i][j],c[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+
+	printf("\n v MATRIX\n");
+	for ( i = 0; i < 8; i++ ){
+		for ( j = 0; j < 8; j++ ){
+			
+			printf("%u, ",v[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n \n");
+
+
+	printf("\nbp_s MATRIX\n");
+	for ( i = 0; i < 8; i++ ){
+		for ( j = 0; j < 8; j++ ){
+			
+			printf("%u, ",bp_s[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n c MATRIX\n");
+
+	printf("\n");
+	for ( i = 0; i < 8; i++ ){
+		for ( j = 0; j < 8; j++ ){
+			
+			printf("%u, ",c[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+*/
+
+	printf("\n K_ALICE\n");
+	for ( i = 0; i < 8; i++ ){
+		for ( j = 0; j < 8; j++ ){
+			
+			printf("%u, ",k_alice[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+	printf("\n K_BOB\n");
+	for ( i = 0; i < 8; i++ ){
+		for ( j = 0; j < 8; j++ ){
+			
+			printf("%u, ",k_bob[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+
+	printf("\n \n");
+	for ( i = 0; i < 8; i++ ){
+		for ( j = 0; j < 8; j++ ){
+			
+			if (epp[i][j]>5 && (32768- epp[i][j])>6) printf("%u,",epp[i][j]);
+		}
+		
+	}
+	printf("\n");
+
+
+	printf("Done...................\n");
 
 }
